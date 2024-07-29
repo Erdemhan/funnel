@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Statistics</title>
+</head>
+<body>
+    <h1>Statistics from {{ one_week_ago }} to {{ today }}</h1>
+    
+    <h2>User Activities</h2>
+    {% load groupby %}
+    {% for session_id, activities in user_activities|groupby_filter:"session_id" %}
+    <h3>User: {{ session_id }}</h3>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Action</th>
+            <th>Product</th>
+            <th>Count</th>
+        </tr>
+        {% for activity in activities %}
+        <tr>
+            <td>{{ activity.timestamp__date }}</td>
+            <td>{{ activity.action }}</td>
+            <td>{{ activity.product__name }}</td>
+            <td>{{ activity.count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+
+    <h2>Product Statistics</h2>
+    <table border="1">
+        <tr>
+            <th>Product</th>
+            <th>Views</th>
+            <th>Added to Cart</th>
+            <th>Purchased</th>
+        </tr>
+        {% for product, stats in product_stats.items %}
+        <tr>
+            <td>{{ product }}</td>
+            <td>{{ stats.views }}</td>
+            <td>{{ stats.added_to_cart }}</td>
+            <td>{{ stats.purchased }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
